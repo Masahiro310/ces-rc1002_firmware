@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<FileList>
+  <Calibration>/opt/piLab/config/Calibration.xml</Calibration>
+  <UnitSetting>/opt/piLab/config/UnitSetting.xml</UnitSetting>
+  <CameraLog>/opt/piLab/config/CameraLog.xml</CameraLog>
+  <Network>/opt/piLab/config/interfaces</Network>
+  <WebPort>/opt/piLab/config/http_port.txt</WebPort>
+  <Sensitivity>/opt/piLab/config/Sensitivity.xml</Sensitivity>
+  <PelcoSetting>/opt/piLab/config/PelcoSetting.xml</PelcoSetting>
+</FileList>

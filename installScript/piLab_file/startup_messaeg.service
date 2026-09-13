@@ -1,0 +1,12 @@
+[Unit]
+Description = StartupMessage
+After=bluetooth.target bluealsa.service
+Before=apache2.service
+
+[Service]
+Type=simple
+ExecStart=/opt/installer/install.sh
+
+
+[Install]
+WantedBy = multi-user.target

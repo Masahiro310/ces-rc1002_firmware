@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="utf-8" />
+		<title>CES-RC-1002</title>
+		<meta name="robots" content="noindex,nofollow"> 
+		<meta name="robots" content="noarchive">
+
+		<link rel="stylesheet" href="css/home.css" type="text/css" />
+		<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+		<link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css" />
+
+		<script type="text/javascript" src="js/jquery-1.12.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="js/jquery.blockUI.js"></script>
+		<script type="text/javascript" src="js/common.js"></script>
+
+		<script>
+			//     jQuery(window).load(function(){
+			//         var ua = navigator.userAgent.toLowerCase();
+			//         var navigator_language = "";
+			//         if(ua.indexOf("msie") != -1){
+			//             // IE10より前(JQueryが動かないので、実質IE9、10の対応)
+			//             navigator_language = navigator.browserLanguage;
+			//         }else{
+			//             // IE11、firfox、chrome、safari
+			//             navigator_language = navigator.language;
+			//         }
+			//         var language_complete = navigator_language.split("-");
+			//         var language = (language_complete[0]);
+			// //        i18n.init({ lng: language });
+			//         jQuery('#loading').hide();
+			//     });
+			$(function () {
+				$("#menu").load("menu.html");
+				$("#contents").load("unitSetting.html");
+				unitTimeTimer = setInterval(function () {
+					unit_time.setSeconds(unit_time.getSeconds() + 1);
+					setUnitDateTime(unit_time);
+					setPcDateTime();
+				}, 1000);
+			});
+
+			//// 日時設定用のタイマーイベントを呼び出しておく
+			let unit_time = new Date();
+			let month = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+			function setUnitDateTime(date) {
+				$("#now_date_time").text(
+					date.getFullYear() + "/" + month[Number(date.getMonth())] + "/" + ("0"+date.getDate()).slice(-2) + " " + ("0"+date.getHours()).slice(-2) + ":" + ("0"+date.getMinutes()).slice(-2) + ":" + ("0"+date.getSeconds()).slice(-2)
+				);
+			}
+			function setPcDateTime() {
+				if($("input:radio[name=time_sync]:checked").val()=="manual"
+					&& $('#pc_sync').prop('checked')){
+					var now = new Date();
+					$("#date").val(
+						now.getFullYear() +
+							"/" +
+							month[Number(now.getMonth())] +
+							"/" +
+							("0" + now.getDate()).slice(-2)
+					);
+					$("#hour_time").val(("0" + now.getHours()).slice(-2));
+					$("#minute_time").val(("0" + now.getMinutes()).slice(-2));
+					$("#second_time").val(("0" + now.getSeconds()).slice(-2));
+					}
+			}
+
+			function loadHtml(html) {
+				$(function () {
+					$("#contents").load(html);
+				});
+			}
+		</script>
+		<style>
+			body {
+				background: #d9e5ff;
+			}
+		</style>
+	</head>
+	<body>
+		<div class=" navbar-inverse">
+			<header id="navibar">
+				<div class="container-fluid">
+					<a class="navibar brand" href="#"><img style="padding: 5px 0 5px;" src="img/aileun.png" /></a>
+				</div>
+			</header>
+		</div>
+		<div id="setting_area">
+			<nav id="menu"></nav>
+			<main id="contents"></main>
+		</div>
+	</body>
+</html>

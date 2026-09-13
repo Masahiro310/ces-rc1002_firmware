@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<script type="text/javascript" src="js/jquery.numeric.min.js"></script>
+<script type="text/javascript" src="js/initialize.js"></script>
+
+<div class="tabs1">
+	<input id="configs" type="radio" name="tab_home" checked />
+	<label class="tab_home">設定データ</label>
+	<label class="tab_space"> </label>
+	<input id="maintenance" type="radio" name="tab_home" />
+	<label class="tab_home" onclick="loadHtml('maintenance.html');autoMenuClose();">メンテナンス</label>
+</div>
+
+<div class="tabs2">
+	<div class="tab_content" id="interlock_content">
+		<p class="table_title">設定ダウンロード・設定アップロード</p>
+		<table border="2" width="750px">
+			<tbody>
+				<tr>
+					<td style="border-style: none" colspan="2"><h5 style="margin-left: 3px; padding-left: 1px">設定ダウンロード</h5></td>
+					<td style="border-style: none"><button id="btn_save_execute" type="button" class="btn btn-primary btn-lg">実行</button></td>
+				</tr>
+				<tr>
+					<td style="border-style: none" width="30%"><h5 style="margin-left: 3px; padding-left: 1px">設定アップロード</h5></td>
+					<td style="border-style: none; padding-top: 10px" width="40%">
+						<div class="file_select">
+							<input
+								class="file-input"
+								id="file-input2"
+								name="uploadFile2"
+								type="file"
+								enctype="multipart/form-data"
+								style="width: 0px; height: 0px; display: block"
+							/>
+							<div class="input-append">
+								<span id="selected-file2" class="input-xlarge uneditable-input">select file...</span>
+								<a class="btn" id="file-selector2">
+									<i class="icon-file"></i>
+								</a>
+								<a class="btn" id="file-deletor2">
+									<i class="icon-trash"></i>
+								</a>
+							</div>
+						</div>
+					</td>
+					<td style="border-style: none" width="30%"><button id="btn_load_execute" type="button" class="btn btn-primary btn-lg">実行</button></td>
+				</tr>
+			</tbody>
+		</table>
+		<br />
+		<p class="table_title">設定初期化</p>
+		<table border="2" width="750px">
+			<tr>
+				<td style="border-style: none" width="20%"><h5 style="margin-left: 3px; padding-left: 1px">設定初期化</h5></td>
+				<td style="border-style: none" width="50%">
+					<div class="form-group">
+						<div class="form-radio">
+							<label class="form-check-label"><input class="form-check-input" type="radio" name="without_netconf" value="without_net" checked /> 本機のネットワーク設定を除外する</label>
+						</div>
+						<div class="form-radio">
+							<label class="form-check-label"><input class="form-check-input" type="radio" name="without_netconf" value="init_all" /> すべての設定を初期化する</label>
+						</div>
+					</div>
+				</td>
+				<td style="border-style: none" width="30%" align="center"><button id="btn_initialize" type="button" class="btn btn-primary btn-lg">実行</button></td>
+			</tr>
+		</table>
+	</div>
+	<script></script>
+</div>
+
+
+<!-- ファイル選択エラーダイアログ -->
+<div class="popup-dialog" id="file_select_err2" title="ファイル選択エラー">
+	<table>
+		<tr><td>ファイルが選択されていません</td></tr>
+	</table>
+</div>
+<!-- ファイル転送エラーダイアログ -->
+<div class="popup-dialog" id="file_transfer_err2" title="ファイルアップ/ダウンロードエラー">
+	<div class="err_msg" id="file_transfer_err2_msg"></div>
+</div>
+
+<!-- 設定アップロード実行通知ダイアログ -->
+<div class="popup-dialog" id="during_setting_load2" title="システムの再起動">
+	<table>
+		<tr><td>設定データのアップロードを実行しました</td></tr>
+		<tr><td>まもなく本機は自動的に再起動します</td></tr>
+		<tr><td>起動するまでしばらくお待ちください</td></tr>
+	</table>
+</div>
+
+<!-- 設定アップロード実行確認ダイアログ -->
+<div class="popup-dialog" id="confirm_dl_config" title="設定データ・ダウンロード実行確認">
+	<table>
+		<tr><td>設定データのダウンロードを実行してもよろしいですか？</td></tr>
+	</table>
+</div>
+
+<!-- 設定アップロード実行確認ダイアログ -->
+<div class="popup-dialog" id="confirm_setting_load" title="設定データ・アップロード実行確認">
+	<table>
+		<tr><td>選択した設定データのアップロードを実行してもよろしいですか？</td></tr>
+	</table>
+</div>
+<div class="popup-dialog" id="initialize_setting" title="設定初期化実行確認">
+	<table>
+		<tr><td>設定データの初期化を実行してもよろしいですか？</td></tr>
+	</table>
+</div>
+
+<div class="popup-dialog" id="during_initialize_setting" title="システムの再起動">
+	<table>
+		<tr><td>設定データの初期化を実行しました</td></tr>
+		<tr><td>まもなく本機は自動的に再起動します</td></tr>
+		<tr><td>起動するまでしばらくお待ちください</td></tr>
+	</table>
+</div>

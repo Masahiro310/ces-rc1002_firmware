@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+
+<div class="tabs1">
+	<input id="ch01-20" type="radio" name="tab_home" checked />
+	<label class="tab_home" for="network">カメラコマンドログ</label>
+</div>
+
+<div class="tabs2">
+	<div class="tab_content" id="camera_content">
+		<p class="table_title">カメラコマンドログ</p>
+		<table border="2" width="750px">
+			<tr>
+				<th>日時</th>
+				<th>カメラ/回転台</th>
+				<th colspan="3">ログ内容</th>
+			</tr>
+		</table>
+	</div>
+	<script type="text/javascript">
+		$("#camera_content").load("getCameraLog.php");
+	</script>
+</div>

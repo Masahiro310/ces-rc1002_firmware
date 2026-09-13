@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<script type="text/javascript" src="js/jquery.numeric.min.js"></script>
+<script type="text/javascript" src="js/validate.js"></script>
+<script type="text/javascript" src="js/datepicker-ja.js"></script>
+<script type="text/javascript" src="js/dateSetting.js"></script>
+
+<script>
+	getUnitTime();
+	getNtpInfo();
+	setNowTime();
+	initDateSetting();
+	$("#ntp_setting").click(function () {
+		setNtpInfo();
+	});
+	$("#clear_setting").click(function () {
+		getUnitTime();
+		getNtpInfo();
+		setNowTime();
+		$("#pc_sync").prop("checked", false);
+		initDateSetting();
+	});
+	$("#pc_sync").click(function () {
+		setActiveDateItem($("input:radio[name=time_sync]:checked").val());
+	});
+	$( function() {
+		$( "#date" ).datepicker({
+			minDate: new Date(2020, 1 - 1, 1),
+			maxDate: new Date(2035, 12 - 1, 31),
+		});
+		$( "#date" ).attr('readonly', 'true');		
+	} );
+</script>
+<div id="dialog" style="display: none">
+	<p id="dialog_message">メッセージ</p>
+</div>
+
+<div class="tabs1">
+	<input id="network" type="radio" name="tab_home" />
+	<label class="tab_home" onclick="loadHtml('unitSetting.html');autoMenuClose();">基本</label>
+	<label class="tab_space"> </label>
+	<input id="date_stting" type="radio" name="tab_home" checked />
+	<label class="tab_home">日時</label>
+</div>
+<div class="tabs2">
+	<div class="tab_content" id="time_content">
+		<table border="2" width="750px">
+			<tr>
+				<th width="200px" height="50px">現在日時</th>
+				<th style="font-size: 25px;" id="now_date_time"></th>
+			</tr>
+		</table>
+		<br />
+		<table border="2" width="750px">
+			<p class="table_title">日時設定</p>
+			<tr>
+				<th width="200px" height="50px">同期方法選択</th>
+				<td>
+					<div class="form-group">
+						<div class="form-radio">
+							<label class="form-check-label"><input class="form-check-input" type="radio" name="time_sync" value="use_ntp" /> NTPを使用して日時を同期する</label>
+						</div>
+						<div class="form-radio">
+							<label class="form-check-label"><input class="form-check-input" type="radio" name="time_sync" value="manual" /> 手動で日時を設定する</label>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<br />
+		<p class="table_title">NTP設定</p>
+		<table border="2" width="750px">
+			<tr>
+				<th width="200px" height="50px">NTPサーバーアドレス</th>
+				<td>
+					<input class="input-xxlarge" type="text" id="ntp_server_addr" maxlength="253" />
+				</td>
+			</tr>
+			<tr>
+				<th width="200px" height="50px">NTP取得状態</th>
+				<td id="ntp_connect_status"></td>
+			</tr>
+		</table>
+		<br />
+		<p class="table_title">手動日時設定</p>
+		<table border="2" width="750px">
+			<tr>
+				<th width="200px" height="50px">日付</th>
+				<td>
+					<input class="input-medium" type="text" id="date" value="" />
+				</td>
+			</tr>
+			<tr>
+				<th width="200px" height="50px">時刻</th>
+				<td>
+					<input class="positive-integer input-mini" type="text" id="hour_time" maxlength="2" value="10" /> :
+					<input class="positive-integer input-mini" type="text" id="minute_time" maxlength="2" value="10" /> :
+					<input class="positive-integer input-mini" type="text" id="second_time" maxlength="2" value="10" />
+				</td>
+			</tr>
+		</table>
+		<input type="checkbox" id="pc_sync" style="	margin: 0px 0px 0px 530px;"/>コンピューターの日時と同期
+		<div class="button_place">
+			<button type="button" class="btn btn-primary btn-lg" style="margin-right: 5px;" id="ntp_setting">設定</button>
+			<button type="button" class="btn btn-primary btn-lg" style="margin-left: 5px;" id="clear_setting">クリア</button>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var unit_date = $(".numeric").numeric();
+		$(".integer").numeric(false, function () {
+			alert("Integers only");
+			this.value = "";
+			this.focus();
+		});
+		$(".positive").numeric({ negative: false }, function () {
+			alert("No negative values");
+			this.value = "";
+			this.focus();
+		});
+		$(".positive-integer").numeric({ decimal: false, negative: false }, function () {
+			alert("不正な文字（制御文字等）が使用されています");
+			this.value = "";
+			this.focus();
+		});
+		$(".decimal-2-places").numeric({ decimalPlaces: 2 });
+		$(".alternative-decimal-separator").numeric({ altDecimal: "," });
+		$(".alternative-decimal-separator-reverse").numeric({ altDecimal: ".", decimal: "," });
+		$("#remove").click(function (e) {
+			e.preventDefault();
+			$(".numeric,.integer,.positive,.positive-integer,.decimal-2-places,.alternative-decimal-separator,.alternative-decimal-separator-reverse").removeNumeric();
+		});
+	</script>
+</div>

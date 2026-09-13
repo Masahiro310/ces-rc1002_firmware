@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PelcoSetting>
+  <SerialSpeed>38400</SerialSpeed>
+  <CameraId>1</CameraId>
+  <PtLoSpeed>1</PtLoSpeed>
+  <PtHiSpeed>63</PtHiSpeed>
+</PelcoSetting>

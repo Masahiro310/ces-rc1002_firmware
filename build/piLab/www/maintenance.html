@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<script type="text/javascript" src="js/jquery.numeric.min.js"></script>
+<script type="text/javascript" src="js/maintenance.js"></script>
+<div class="tabs1">
+	<input id="configs" type="radio" name="tab_home" />
+	<label class="tab_home" onclick="loadHtml('initialize.html');autoMenuClose();">設定データ</label>
+	<label class="tab_space"> </label>
+	<input id="maintenance" type="radio" name="tab_home" checked />
+	<label class="tab_home">メンテナンス</label>
+</div>
+
+<div class="tabs2">
+	<div class="tab_content" id="interlock_content">
+		<p class="table_title">バージョンアップ</p>
+		<h5 align="right">Ver.<span id="soft_ver"></span></h5>
+		<table border="2" width="750px">
+			<tr>
+				<td style="border-style: none" width="30%"><h5 style="margin-left: 3px; padding-left: 1px">バージョンアップ</h5></td>
+				<td style="border-style: none; padding-top: 10px" width="40%">
+					<div class="file_select">
+						<input class="file-input" id="file-input1" name="uploadFile2" type="file" enctype="multipart/form-data" style="width: 0px; height: 0px; display: block" />
+						<div class="input-append">
+							<span id="selected-file1" class="input-xlarge uneditable-input">select file...</span>
+							<a class="btn" id="file-selector1">
+								<i class="icon-file"></i>
+							</a>
+							<a class="btn" id="file-deletor1">
+								<i class="icon-trash"></i>
+							</a>
+						</div>
+					</div>
+				</td>
+				<td style="border-style: none" width="30%" align="center"><button id="btn_update_execute" type="button" class="btn btn-primary btn-lg">実行</button></td>
+			</tr>
+		</table>
+		<br />
+		<br />
+		<p class="table_title">各種ログ初期化</p>
+		<table border="2" width="750px">
+			<tr>
+				<td style="border-style: none" width="70%"><h5 style="margin-left: 3px; padding-left: 1px">各種ログ初期化</h5></td>
+				<td style="border-style: none" width="30%" align="center"><button id="btn_initialize_log" type="button" class="btn btn-primary btn-lg">実行</button></td>
+			</tr>
+		</table>
+		<br />
+		<p class="table_title">サポートデータ取得</p>
+		<table border="2" width="750px">
+			<tr>
+				<td style="border-style: none" colspan="2"><h5 style="margin-left: 3px; padding-left: 1px">サポートデータ取得</h5></td>
+				<td style="border-style: none" width="30%" align="center"><button id="btn_dl_logs_execute" type="button" class="btn btn-primary btn-lg">実行</button></td>
+			</tr>
+		</table>
+	</div>
+	<script></script>
+</div>
+
+<!-- バージョンアップ実行確認ダイアログ -->
+<div class="popup-dialog" id="confirm_update" title="バージョンアップ実行確認">
+	<table>
+		<tr>
+			<td>バージョンアップを実行してもよろしいですか？</td>
+		</tr>
+	</table>
+</div>
+
+<!-- バージョンアップ実行通知ダイアログ -->
+<div class="popup-dialog" id="during_update" title="システムの再起動">
+	<table>
+		<tr>
+			<td>バージョンアップを実行しました</td>
+		</tr>
+		<tr>
+			<td>まもなく本機は自動的に再起動します</td>
+		</tr>
+		<tr>
+			<td>起動するまでしばらくお待ちください</td>
+		</tr>
+	</table>
+</div>
+
+<!-- 実行中ダイアログ -->
+<div class="popup-dialog" id="executing_process" title="実行中" style="display: none">
+	<div style="text-align: center"><div id="executing_process_message"></div></div>
+</div>
+
+<!-- 取扱説明書ダウンロード実行確認ダイアログ -->
+<div class="popup-dialog" id="confirm_dl_um" title="取扱説明書ダウンロード実行確認">
+	<table>
+		<tr>
+			<td>取扱説明書のダウンロードを実行してもよろしいですか？</td>
+		</tr>
+	</table>
+</div>
+
+<!-- ファイル選択エラーダイアログ -->
+<div class="popup-dialog" id="file_select_err" title="ファイル選択エラー">
+	<table>
+		<tr>
+			<td>ファイルが選択されていません</td>
+		</tr>
+	</table>
+</div>
+
+<!-- 設定ファイル作成アプリケーション実行確認ダイアログ -->
+<div class="popup-dialog" id="confirm_dl_sa" title="設定ツールダウンロード実行確認">
+	<table>
+		<tr>
+			<td>設定ツールのダウンロードを実行してもよろしいですか？</td>
+		</tr>
+	</table>
+</div>
+
+<!-- サポートデータ取得実行確認ダイアログ -->
+<div class="popup-dialog" id="confirm_dl_logs" title="サポートデータ・ダウンロード実行確認">
+	<table>
+		<tr>
+			<td>サポートデータのダウンロードを実行してもよろしいですか？</td>
+		</tr>
+	</table>
+</div>
+
+<!-- ファイル転送エラーダイアログ -->
+<div class="popup-dialog" id="file_transfer_err" title="ファイルアップ/ダウンロードエラー">
+	<div class="err_msg" id="file_transfer_err_msg"></div>
+</div>
+
+<div class="popup-dialog" id="initialize_log" title="各種ログ初期化実行確認">
+	<table>
+		<tr><td>各種ログデータの初期化を実行してもよろしいですか？</td></tr>
+	</table>
+</div>
+
+<div class="popup-dialog" id="comp_initialize_log" title="各種ログ初期化完了">
+	<table>
+		<tr><td>各種ログの初期化が完了しました</td></tr>
+	</table>
+</div>

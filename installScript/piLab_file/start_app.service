@@ -1,0 +1,18 @@
+[Unit]
+Description = monitoring sensor
+#After=network.target bluetooth.target bluealsa.service
+After=network.target getty@tty1.service
+
+[Service]
+Type=simple
+User=pi
+ExecStart=/opt/piLab/start_apps.sh
+Restart=always
+
+
+[Install]
+WantedBy = getty.target
+DefaultInstance=tty1
+#WantedBy = multi-user.target
+#WantedBy = bluetooth.target
+#WantedBy = graphical.target

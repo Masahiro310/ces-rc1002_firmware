@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+
+<script type="text/javascript" src="js/jquery.numeric.min.js"></script>
+<script>
+	var setUnitUrl = "cgi-bin/setUnitSetting.php";
+	var setNetworkUrl = "cgi-bin/setNetworkInfo.php";
+	var getNetworkUrl = "cgi-bin/getNetworkInfo.php";
+	var getUserUrl = "cgi-bin/getUserInfo.php";
+	var getSensitivityUrl = "cgi-bin/getSensitivityInfo.php";
+
+	function getNetworkSetting() {
+		$.ajax({
+			async: true,
+			url: getNetworkUrl,
+			type: "POST",
+			dataType: "json",
+			success: function (network) {
+				$("#ipaddr1").val(network.ipaddr1);
+				$("#ipaddr2").val(network.ipaddr2);
+				$("#ipaddr3").val(network.ipaddr3);
+				$("#ipaddr4").val(network.ipaddr4);
+				$("#subnet").val(network.subnet);
+				$("#gateway1").val(network.gateway1);
+				$("#gateway2").val(network.gateway2);
+				$("#gateway3").val(network.gateway3);
+				$("#gateway4").val(network.gateway4);
+				$("#http_port").val(network.http_port);
+				$("#dns1").val(network.dns1);
+				$("#dns2").val(network.dns2);
+				$("#dns3").val(network.dns3);
+				$("#dns4").val(network.dns4);
+			},
+		});
+	}
+	function getUserSetting() {
+		$.ajax({
+			async: true,
+			url: getUserUrl,
+			type: "POST",
+			dataType: "json",
+			success: function (network) {
+				$("#user").val(network.user);
+				$("#password").val(network.password);
+				$("#conf_pass").val(network.password);
+				$("#unit_password").val(network.unit_password);
+			},
+		});
+	}
+
+	function getSensitivity() {
+		$.ajax({
+			async: true,
+			url: getSensitivityUrl,
+			type: "POST",
+			dataType: "json",
+			success: function (network) {
+				$("#pan_sensitivity").val(network.pan_sensitivity);
+				$("#tilt_sensitivity").val(network.tilt_sensitivity);
+				$("#zoom_sensitivity").val(network.zoom_sensitivity);
+				$("#stop_area").val(network.stop_area);
+				if ($("#stop_area").val() == null || $("#stop_area").val() === "") {
+						$("#stop_area").val("10");
+				}
+			},
+		});
+	}
+
+	function setUnitSetting() {
+		$.blockUI();
+		var send_data =
+			"ipaddr1=" +
+			$("#ipaddr1").val() +
+			"&" +
+			"ipaddr2=" +
+			$("#ipaddr2").val() +
+			"&" +
+			"ipaddr3=" +
+			$("#ipaddr3").val() +
+			"&" +
+			"ipaddr4=" +
+			$("#ipaddr4").val() +
+			"&" +
+			"subnet=" +
+			$("#subnet").val() +
+			"&" +
+			"gateway1=" +
+			$("#gateway1").val() +
+			"&" +
+			"gateway2=" +
+			$("#gateway2").val() +
+			"&" +
+			"gateway3=" +
+			$("#gateway3").val() +
+			"&" +
+			"gateway4=" +
+			$("#gateway4").val() +
+			"&" +
+			"http_port=" +
+			$("#http_port").val() +
+			"&" +
+			"dns1=" +
+			$("#dns1").val() +
+			"&" +
+			"dns2=" +
+			$("#dns2").val() +
+			"&" +
+			"dns3=" +
+			$("#dns3").val() +
+			"&" +
+			"dns4=" +
+			$("#dns4").val() +
+			"&" +
+			"user=" +
+			encodeURIComponent($("#user").val()) + 
+			"&" +
+			"password=" +
+			encodeURIComponent($("#password").val()) +
+			"&" +
+			"conf_pass=" +
+			encodeURIComponent($("#conf_pass").val()) +
+			"&" +
+			"unit_password=" +
+			$("#unit_password").val() +
+			"&" +
+			"pan_sensitivity=" +
+			$("#pan_sensitivity").val() +
+			"&" +
+			"tilt_sensitivity=" +
+			$("#tilt_sensitivity").val() +
+			"&" +
+			"zoom_sensitivity=" +
+			$("#zoom_sensitivity").val() +
+			"&" +
+			"stop_area=" +
+			$("#stop_area").val();
+		$.ajax({
+			async: true,
+			url: setUnitUrl,
+			data: send_data,
+			type: "POST",
+			dataType: "json",
+			success: function (res) {
+				$.unblockUI();
+				if (res["status"] == 2){
+					// apache自動再起動
+				}
+				else if (res["status"] != 0) {
+					alert(res["message"]);
+				}
+				else{
+					// execute_restart("during_network_setting", "AILEUN_APP_REBOOT");
+					$('#during_network_setting').dialog('open');
+				}
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				getNetworkSetting();
+				$.unblockUI();
+			},
+		});
+
+	}
+	function clearNetworkSetting() {
+		$("#ipaddr1").val("");
+		$("#ipaddr2").val("");
+		$("#ipaddr3").val("");
+		$("#ipaddr4").val("");
+		$("#subnet").val("24");
+		$("#gateway1").val("");
+		$("#gateway2").val("");
+		$("#gateway3").val("");
+		$("#gateway4").val("");
+		$("#http_port").val("80");
+		$("#dns1").val("");
+		$("#dns2").val("");
+		$("#dns3").val("");
+		$("#dns4").val("");
+	}
+	function clearUserSetting() {
+		$("#user").val("");
+		$("#password").val("");
+		$("#conf_pass").val("");
+		$("#unit_password").val("");
+	}
+	// ネットワーク設定実行完了ダイアログ
+	$("#during_network_setting").dialog({
+		modal: true,
+		autoOpen: false,
+		width: 350,
+		resizable: false,
+		open: function (event, ui) {
+			$(".ui-dialog-titlebar-close").hide();
+		},
+		buttons: {
+			OK: function () {
+				$(this).dialog("close");
+			},
+		},
+	});
+
+	$(function () {
+		getNetworkSetting();
+		getUserSetting();
+		getSensitivity();
+		$("#network_setting").click(function () {
+			setUnitSetting();
+		});
+		$("#clear_setting").click(function () {
+			getNetworkSetting();
+			getUserSetting();
+			getSensitivity();
+		});
+	});
+</script>
+<div class="tabs1">
+	<input id="network" type="radio" name="tab_home" checked />
+	<label class="tab_home" for="network">基本</label>
+	<label class="tab_space"> </label>
+	<input id="date_stting" type="radio" name="tab_home" />
+	<label class="tab_home" onclick="loadHtml('dateSetting.html');autoMenuClose();" for="date">日時</label>
+</div>
+
+<div class="tabs2">
+	<div class="tab_content" id="network_content">
+		<p class="table_title">本体ネットワーク設定</p>
+		<table border="2" width="750px">
+			<tr>
+				<th width="200px">IPアドレス</th>
+				<td>
+					<input class="positive-integer input-mini" type="text" id="ipaddr1" maxlength="3" value="" /> .
+					<input class="positive-integer input-mini" type="text" id="ipaddr2" maxlength="3" value="" /> .
+					<input class="positive-integer input-mini" type="text" id="ipaddr3" maxlength="3" value="" /> .
+					<input class="positive-integer input-mini" type="text" id="ipaddr4" maxlength="3" value="" />
+				</td>
+			</tr>
+			<tr>
+				<th width="200px">サブネットマスク</th>
+				<td>
+					<select id="subnet">
+						<option value="8">/8 (255.0.0.0)</option>
+						<option value="9">/9 (255.128.0.0)</option>
+						<option value="10">/10 (255.192.0.0)</option>
+						<option value="11">/11 (255.224.0.0)</option>
+						<option value="12">/12 (255.240.0.0)</option>
+						<option value="13">/13 (255.248.0.0)</option>
+						<option value="14">/14 (255.252.0.0)</option>
+						<option value="15">/15 (255.254.0.0)</option>
+						<option value="16">/16 (255.255.0.0)</option>
+						<option value="17">/17 (255.255.128.0)</option>
+						<option value="18">/18 (255.255.192.0)</option>
+						<option value="19">/19 (255.255.224.0)</option>
+						<option value="20">/20 (255.255.240.0)</option>
+						<option value="21">/21 (255.255.248.0)</option>
+						<option value="22">/22 (255.255.252.0)</option>
+						<option value="23">/23 (255.255.254.0)</option>
+						<option value="24">/24 (255.255.255.0)</option>
+						<option value="25">/25 (255.255.255.128)</option>
+						<option value="26">/26 (255.255.255.192)</option>
+						<option value="27">/27 (255.255.255.224)</option>
+						<option value="28">/28 (255.255.255.240)</option>
+						<option value="29">/29 (255.255.255.248)</option>
+						<option value="30">/30 (255.255.255.252)</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th width="200px">ゲートウェイ</th>
+				<td>
+					<input class="positive-integer input-mini" type="text" id="gateway1" maxlength="3" value="" /> .
+					<input class="positive-integer input-mini" type="text" id="gateway2" maxlength="3" value="" /> .
+					<input class="positive-integer input-mini" type="text" id="gateway3" maxlength="3" value="" /> .
+					<input class="positive-integer input-mini" type="text" id="gateway4" maxlength="3" alue="" />
+				</td>
+			</tr>
+			<tr>
+				<th width="200px">HTTPポート</th>
+				<td>
+					<input class="positive-integer input-mini" type="text" id="http_port" maxlength="5" value="" />
+				</td>
+			</tr>
+			<tr>
+				<th width="200px">DNSサーバーアドレス</th>
+				<td>
+					<input class="positive-integer input-mini" type="text" id="dns1" maxlength="3" value="" /> . <input class="positive-integer input-mini" type="text" id="dns2" maxlength="3" value="" /> .
+					<input class="positive-integer input-mini" type="text" id="dns3" maxlength="3" value="" /> . <input class="positive-integer input-mini" type="text" id="dns4" maxlength="3" value="" />
+				</td>
+			</tr>
+		</table>
+		<div id="respose"></div>
+		<br />
+
+		<p class="table_title">管理者設定</p>
+		<table border="2" width="750px">
+			<tr>
+				<th width="200px">ユーザー名</th>
+				<td>
+					<input type="text" id="user" maxlength="32" />
+				</td>
+			</tr>
+			<tr>
+				<th width="200px">パスワード</th>
+				<td>
+					<input type="password" id="password" maxlength="32" />
+				</td>
+			</tr>
+			<tr>
+				<th width="200px">パスワード（確認)</th>
+				<td>
+					<input type="password" id="conf_pass" maxlength="32"/>
+				</td>
+			</tr>
+			<tr>
+				<th width="200px">本体管理パスワード</th>
+				<td>
+					<input class="positive-integer" type="password" id="unit_password" maxlength="5" value="" />
+				</td>
+			</tr>
+		</table>
+		<br />
+
+		<p class="table_title">ジョイスティック操作感度設定</p>
+		<table border="2" width="750px">
+			<tr>
+				<th width="200px">パン操作感度</th>
+				<td>
+					<select id="pan_sensitivity">
+						<option value="100">制限しない</option>
+						<option value="75">75%</option>
+						<option value="50">50%</option>
+						<option value="25">25%</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th width="200px">チルト操作感度</th>
+				<td>
+					<select id="tilt_sensitivity">
+						<option value="100">制限しない</option>
+						<option value="75">75%</option>
+						<option value="50">50%</option>
+						<option value="25">25%</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th width="200px">ズーム操作感度</th>
+				<td>
+					<select id="zoom_sensitivity">
+						<option value="100">制限しない</option>
+						<option value="75">75%</option>
+						<option value="50">50%</option>
+						<option value="25">25%</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th width="200px">ジョイスティック遊び範囲</th>
+				<td>
+					<select id="stop_area">
+						<option value="10">小</option>
+						<option value="40">大</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+
+		<div class="button_place">
+			<button type="button" class="btn btn-primary btn-lg" style="margin-right: 5px;" id="network_setting">設定</button>
+			<button type="button" class="btn btn-primary btn-lg" style="margin-left: 5px;" id="clear_setting">クリア</button>
+		</div>
+	</div>
+	<div id="returnStr"></div>
+	<script type="text/javascript">
+		$(".numeric").numeric();
+		$(".integer").numeric(false, function () {
+			alert("Integers only");
+			this.value = "";
+			this.focus();
+		});
+		$(".positive").numeric({ negative: false }, function () {
+			alert("No negative values");
+			this.value = "";
+			this.focus();
+		});
+		$(".positive-integer").numeric({ decimal: false, negative: false }, function () {
+			alert("不正な文字（制御文字等）が使用されています");
+			this.value = "";
+			this.focus();
+		});
+		$(".decimal-2-places").numeric({ decimalPlaces: 2 });
+		$(".alternative-decimal-separator").numeric({ altDecimal: "," });
+		$(".alternative-decimal-separator-reverse").numeric({
+			altDecimal: ".",
+			decimal: ",",
+		});
+		$("#remove").click(function (e) {
+			e.preventDefault();
+			$(".numeric,.integer,.positive,.positive-integer,.decimal-2-places,.alternative-decimal-separator,.alternative-decimal-separator-reverse").removeNumeric();
+		});
+	</script>
+</div>
+<!-- ネットワーク設定ダイアログ -->
+<div class="popup-dialog" id="during_network_setting" title="システムの再起動">
+	<table>
+		<tr>
+			<td>本体ネットワーク設定が変更されました</td>
+		</tr>
+		<tr>
+			<td>まもなく本機は自動的に再起動します</td>
+		</tr>
+		<tr>
+			<td>起動するまでしばらくお待ちください</td>
+		</tr>
+	</table>
+</div>
