@@ -2,7 +2,7 @@
 require('validate.php');
 require('files.php');
 
-$paramKeys = array('serialSpeed', 'camera_id', 'turntable_id', 'pt_hiSpeed', 'pt_loSpeed');
+$paramKeys = array('serialSpeed', 'camera_id', 'pt_hiSpeed', 'pt_loSpeed');
 
 if (!validateParams($_POST, $paramKeys)) {
 	http_response_code(500);
@@ -27,11 +27,6 @@ function UpdatePelcoConfig(string $key, string $value)
 	} else {
 		$rootElement->appendChild($dom->createElement("CameraId", (string)($xmlData->CameraId)));
 	}
-	if ($key == "TurntableId") {
-		$rootElement->appendChild($dom->createElement("TurntableId", $value));
-	} else {
-		$rootElement->appendChild($dom->createElement("TurntableId", (string)($xmlData->TurntableId)));
-	}
 	if ($key == "PtLoSpeed") {
 		$rootElement->appendChild($dom->createElement("PtLoSpeed", $value));
 	} else {
@@ -55,7 +50,7 @@ function isValidBaudRate($value): bool {
 
 function isValidPelcoId($value): bool {
     // 数値かつ 1 〜 255 の範囲内か判定
-    return is_numeric($value) && $value >= 1 && $value <= 255;
+    return is_numeric($value) && $value >= 1 && $value <= 254;
 }
 
 function isValidSpeed($value): bool {
@@ -66,18 +61,14 @@ function isValidSpeed($value): bool {
 if (
 	isValidBaudRate($_POST['serialSpeed'])
 	&& isValidPelcoId($_POST['camera_id'])
-	&& isValidPelcoId($_POST['turntable_id'])
 	&& isValidSpeed($_POST['pt_hiSpeed'])
 	&& isValidSpeed($_POST['pt_loSpeed'])
 ) {
 
 	UpdatePelcoConfig("SerialSpeed", $_POST['serialSpeed']);
 	UpdatePelcoConfig("CameraId", $_POST['camera_id']);
-	UpdatePelcoConfig("TurntableId", $_POST['turntable_id']);
 	UpdatePelcoConfig("PtLoSpeed", $_POST['pt_loSpeed']);
 	UpdatePelcoConfig("PtHiSpeed", $_POST['pt_hiSpeed']);
-
-	exec( "../../cmd/updateWebUser.sh" );
 
 } else {
 	http_response_code(500);
