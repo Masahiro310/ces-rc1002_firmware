@@ -2,7 +2,7 @@
 require('validate.php');
 require('files.php');
 
-$paramKeys = array('serialSpeed', 'camera_id', 'pt_hiSpeed', 'pt_loSpeed');
+$paramKeys = array('serialSpeed', 'camera_id', 'pt_hiSpeed', 'pt_loSpeed', 'zoom_hiSpeed', 'zoom_loSpeed');
 
 if (!validateParams($_POST, $paramKeys)) {
 	http_response_code(500);
@@ -37,6 +37,16 @@ function UpdatePelcoConfig(string $key, string $value)
 	} else {
 		$rootElement->appendChild($dom->createElement("PtHiSpeed", (string)($xmlData->PtHiSpeed)));
 	}
+	if ($key == "ZoomLoSpeed") {
+		$rootElement->appendChild($dom->createElement("ZoomLoSpeed", $value));
+	} else {
+		$rootElement->appendChild($dom->createElement("ZoomLoSpeed", (string)($xmlData->ZoomLoSpeed)));
+	}
+	if ($key == "ZoomHiSpeed") {
+		$rootElement->appendChild($dom->createElement("ZoomHiSpeed", $value));
+	} else {
+		$rootElement->appendChild($dom->createElement("ZoomHiSpeed", (string)($xmlData->ZoomHiSpeed)));
+	}
 	// $unit_setting = $dom->saveXML();
 	// saveTextFile('../config/PelcoSetting.xml', $unit_setting);
 	$dom->save('../../config/PelcoSetting.xml');
@@ -69,6 +79,8 @@ if (
 	UpdatePelcoConfig("CameraId", $_POST['camera_id']);
 	UpdatePelcoConfig("PtLoSpeed", $_POST['pt_loSpeed']);
 	UpdatePelcoConfig("PtHiSpeed", $_POST['pt_hiSpeed']);
+	UpdatePelcoConfig("ZoomLoSpeed", $_POST['zoom_loSpeed']);
+	UpdatePelcoConfig("ZoomHiSpeed", $_POST['zoom_hiSpeed']);
 
 } else {
 	http_response_code(500);
