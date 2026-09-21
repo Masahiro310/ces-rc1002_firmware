@@ -49,7 +49,7 @@ unzip $COMPRESS_FILE > /dev/null
 # 見つからなければ下位モデルのディレクトリを検索していく
 for no in `seq $CESRC1002_LAST_MODEL_NUMBER -1 $CESRC1002_OLDEST_MODEL_NUMBER`
 do
-	CESRC1002_DIR=`printf "%s/cesrc1002_%d" $TMP_DIR $no`
+	CESRC1002_DIR=`printf "%s/ces_rc1002_%d" $TMP_DIR $no`
 	WORK_DIR=`printf "%s/config" $CESRC1002_DIR`
 	if [ -e $WORK_DIR ]; then
 		break
