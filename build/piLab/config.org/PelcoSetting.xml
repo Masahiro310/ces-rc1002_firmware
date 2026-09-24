@@ -4,6 +4,6 @@
   <CameraId>1</CameraId>
   <PtLoSpeed>1</PtLoSpeed>
   <PtHiSpeed>63</PtHiSpeed>
-  <ZoomLoSpeed>0</ZoomLoSpeed>
+  <ZoomLoSpeed>1</ZoomLoSpeed>
   <ZoomHiSpeed>7</ZoomHiSpeed>
 </PelcoSetting>

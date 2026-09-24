@@ -70,7 +70,7 @@ function isValidSpeed($value): bool {
 
 function isValidZoomSpeed($value): bool {
     // 数値かつ 0 〜 7 の範囲内か判定
-    return is_numeric($value) && $value >= 0 && $value <= 7;
+    return is_numeric($value) && $value >= 1 && $value <= 7;
 }
 
 if (
