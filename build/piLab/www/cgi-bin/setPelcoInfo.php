@@ -59,7 +59,7 @@ function isValidBaudRate($value): bool {
 }
 
 function isValidPelcoId($value): bool {
-    // 数値かつ 1 〜 255 の範囲内か判定
+    // 数値かつ 1 〜 254 の範囲内か判定
     return is_numeric($value) && $value >= 1 && $value <= 254;
 }
 
@@ -68,11 +68,18 @@ function isValidSpeed($value): bool {
     return is_numeric($value) && $value >= 1 && $value <= 63;
 }
 
+function isValidZoomSpeed($value): bool {
+    // 数値かつ 0 〜 7 の範囲内か判定
+    return is_numeric($value) && $value >= 0 && $value <= 7;
+}
+
 if (
 	isValidBaudRate($_POST['serialSpeed'])
 	&& isValidPelcoId($_POST['camera_id'])
 	&& isValidSpeed($_POST['pt_hiSpeed'])
 	&& isValidSpeed($_POST['pt_loSpeed'])
+	&& isValidZoomSpeed($_POST['zoom_loSpeed'])
+	&& isValidZoomSpeed($_POST['zoom_hiSpeed'])
 ) {
 
 	UpdatePelcoConfig("SerialSpeed", $_POST['serialSpeed']);
