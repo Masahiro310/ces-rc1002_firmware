@@ -2,7 +2,7 @@
 require('validate.php');
 require('files.php');
 
-$paramKeys = array('serialSpeed', 'camera_id', 'pt_hiSpeed', 'pt_loSpeed', 'zoom_hiSpeed', 'zoom_loSpeed');
+$paramKeys = array('serialSpeed', 'camera_id', 'pt_hiSpeed', 'zoom_hiSpeed');
 
 if (!validateParams($_POST, $paramKeys)) {
 	http_response_code(500);
@@ -77,16 +77,12 @@ if (
 	isValidBaudRate($_POST['serialSpeed'])
 	&& isValidPelcoId($_POST['camera_id'])
 	&& isValidSpeed($_POST['pt_hiSpeed'])
-	&& isValidSpeed($_POST['pt_loSpeed'])
-	&& isValidZoomSpeed($_POST['zoom_loSpeed'])
 	&& isValidZoomSpeed($_POST['zoom_hiSpeed'])
 ) {
 
 	UpdatePelcoConfig("SerialSpeed", $_POST['serialSpeed']);
 	UpdatePelcoConfig("CameraId", $_POST['camera_id']);
-	UpdatePelcoConfig("PtLoSpeed", $_POST['pt_loSpeed']);
 	UpdatePelcoConfig("PtHiSpeed", $_POST['pt_hiSpeed']);
-	UpdatePelcoConfig("ZoomLoSpeed", $_POST['zoom_loSpeed']);
 	UpdatePelcoConfig("ZoomHiSpeed", $_POST['zoom_hiSpeed']);
 
 } else {
